@@ -1,4 +1,4 @@
-var env = require("./environment");
+var env = require("./settings/local");
 
 module.exports = {
   env: env.INDIFI_ENV,
