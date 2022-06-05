@@ -22,14 +22,14 @@ app.use(function (req, response, next) {
 //const authRoutes = require("./routes/index");
 const authRoutes = require("./routes/auth");
 const songsRoutes = require("./routes/songs");
-const playlistRoutes = require("./routes/app_playlist_songs");
-const playlistMetaRoutes = require("./routes/app_playlist_meta");
-
+const adminRoutes = require("./routes/admin");
+const app_palylist_meta = require("./routes/app_playlist_meta");
 //Middle Ware
 app.use("/", authRoutes);
 app.use("/songs", songsRoutes);
-app.use("/playlist", playlistRoutes);
-app.use("/app_playlist_meta", playlistMetaRoutes);
+app.use("/admin", adminRoutes);
+app.use("/playlist", app_palylist_meta);
+
 const port = process.env.PORT ? process.env.PORT : 2410;
 
 app.listen(port, () => {

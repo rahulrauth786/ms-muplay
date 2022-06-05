@@ -1,3 +1,8 @@
+var AbstractResource = require("./abstract_resourse"),
+  Songs = AbstractResource("songs");
+db = require("../db/postgresql");
+Q = require("q");
+
 exports.addSingleSong = function (req, res) {
   let user = { role: "admin" };
   if (user && user.role === "admin") {
@@ -64,57 +69,6 @@ exports.editExistingSong = function (req, res) {
       } else {
         res.send({ msg: "No Song Exists" });
       }
-    }
-  }
-};
-
-exports.addMultipleSong = async function (req, res) {
-  let user = { role: "admin" };
-  let jsonData = req.body;
-  console.log(jsonData);
-  if (user && user.role === "admin") {
-    if (jsonData && jsonData.length >= 0) {
-      let dataStatus = [];
-      let allSongs = require("./musicFile/allSongs.js.js.js");
-      jsonData.map(function (obj) {
-        console.log(obj.genre);
-        if (obj.playlist !== undefined && obj.genre) {
-          let songPlaylist = require(`./musicFile/${obj.playlist}/${obj.genre}`);
-          let song = songPlaylist.find((song) => song.title === obj.title);
-          if (!song) {
-            dataStatus.push({
-              title: obj.title,
-              genre: obj.genre,
-              genreImg: obj.genreImg,
-              img: obj.img,
-              track: obj.track,
-              playlist: obj.playlist,
-              status: "Added",
-              reason: "NA",
-            });
-            let songId = allSongs.length + 1;
-            let index = allSongs.findIndex((song) => song.title === obj.title);
-            if (index < 0) {
-              allSongs.push({ id: songId, ...obj });
-            }
-            songPlaylist.push({ id: songId, ...obj });
-          } else {
-            dataStatus.push({
-              title: obj.title,
-              genre: obj.genre,
-              genreImg: obj.genreImg,
-              img: obj.img,
-              track: obj.track,
-              playlist: obj.playlist,
-              status: "Not Added",
-              reason: "Already Exist",
-            });
-          }
-        }
-      });
-      res.status(200).send(dataStatus);
-    } else {
-      res.status(404).send("No Data Available");
     }
   }
 };
@@ -254,8 +208,7 @@ exports.resetAllSongs = async function (req, res) {
         } else {
           console.log("keySNotMatching");
           res.status(404).send({
-            msg:
-              "Csv File Contains Invalid Property Please Upload Valid Csv Files",
+            msg: "Csv File Contains Invalid Property Please Upload Valid Csv Files",
           });
         }
       } catch (error) {

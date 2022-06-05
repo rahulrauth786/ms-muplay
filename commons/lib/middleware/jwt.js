@@ -61,20 +61,3 @@ var oAuth = {
 };
 
 module.exports = oAuth;
-
-// exports.generateToken = function (results) {
-//   console.log("point2");
-//   if (results && results.length > 0) {
-//     let payload = {
-//       id: results[0].email,
-//     };
-//     console.log(payload);
-//     let token = jwt.sign(payload, cfg.jwtSecret, {
-//       algorithm: "HS256",
-//       expiresIn: jwtExpirySeconds,
-//     });
-//     resolve(token);
-//   } else {
-//     reject("Invalid User Password");
-//   }
-// };

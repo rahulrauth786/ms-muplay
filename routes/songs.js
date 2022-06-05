@@ -7,51 +7,55 @@ const auth = require("../commons/lib/middleware/jwt.js");
 const User = require("../commons/lib/resources/user.js");
 
 const Songs = require("../commons/lib/resources/songs.js");
-const Playlist = require("../commons/lib/resources/app_playlist_songs.js");
 
-router.post("/addSong", async function (req, res) {
-  let jsonData = req.body;
-  try {
-    if (jsonData && jsonData.length >= 0) {
-      let dataStatus = [];
-
-      for (let i = 0; i < jsonData.length; i++) {
-        let results = await Songs.checkSongExist(jsonData[i].title);
-        let data = [];
-        if (results.length <= 0) {
-          await Songs.insert(jsonData[i]);
-          let response = await Songs.checkSongExist(jsonData[i].title);
-
-          let playlists = JSON.parse(jsonData[i].category);
-          playlists.map((item) => {
-            data.push({
-              app_playlist_id: response,
-              songs_id,
-            });
-          });
-
-          await Playlist.insert(jsonData);
-          await dataStatus.push({
-            ...jsonData[i],
-            status: "Added",
-            reason: "NA",
-          });
-        } else {
-          console.log(2.2);
-          dataStatus.push({
-            ...jsonData[i],
-            status: "Not Added",
-            reason: "Already Exist",
-          });
-        }
-      }
-      res.send({ success: true, dataStatus });
-    } else {
-      res.status(404).send("No Data Available");
-    }
-  } catch (error) {
-    console.log("error");
-  }
+router.post("/addSongs", async function (req, res) {
+  Songs.addSongs(req.body)
+    .then((data) => {
+      console.log(data);
+      res.send({ success: true, data });
+    })
+    .catch((error) => {
+      res.status(404).send(error);
+    });
+  // let jsonData = req.body;
+  // try {
+  //   if (jsonData && jsonData.length >= 0) {
+  //     let dataStatus = [];
+  //     for (let i = 0; i < jsonData.length; i++) {
+  //       let results = await Songs.checkSongExist(jsonData[i].title);
+  //       let data = [];
+  //       if (results.length <= 0) {
+  //         await Songs.insert(jsonData[i]);
+  //         let response = await Songs.checkSongExist(jsonData[i].title);
+  //         let playlists = JSON.parse(jsonData[i].category);
+  //         playlists.map((item) => {
+  //           data.push({
+  //             app_playlist_id: response,
+  //             songs_id,
+  //           });
+  //         });
+  //         await Playlist.insert(jsonData);
+  //         await dataStatus.push({
+  //           ...jsonData[i],
+  //           status: "Added",
+  //           reason: "NA",
+  //         });
+  //       } else {
+  //         console.log(2.2);
+  //         dataStatus.push({
+  //           ...jsonData[i],
+  //           status: "Not Added",
+  //           reason: "Already Exist",
+  //         });
+  //       }
+  //     }
+  //     res.send({ success: true, dataStatus });
+  //   } else {
+  //     res.status(404).send("No Data Available");
+  //   }
+  // } catch (error) {
+  //   console.log("error");
+  // }
 });
 
 router.get("/download/csv/:reportType", async function (req, res) {

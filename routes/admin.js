@@ -8,7 +8,7 @@ const router = express.Router();
 const {
   addSingleSong,
   editExistingSong,
-  addMultipleSong,
+  addSongs,
   getSongById,
   resetAllSongs,
   download,
@@ -18,11 +18,7 @@ const {
   mostPlayedChart,
 } = require("../commons/lib/resources/admin");
 
-router.post("/addSingleSong", addSingleSong);
-
 router.put("/editExistingSong/:id", editExistingSong);
-
-router.post("/addMultipleSong", addMultipleSong);
 
 router.get("/getSongById/:id", getSongById);
 
@@ -37,3 +33,5 @@ router.post("/mostFavSong", mostFavSong);
 router.post("/mostPlayedSong", mostPlayedSong);
 
 router.post("/mostPlayedChart", mostPlayedChart);
+
+module.exports = router;
